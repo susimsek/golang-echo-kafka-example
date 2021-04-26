@@ -1,0 +1,127 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Provides access to the core features of Golang User REST API",
+        "title": "Golang User REST API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {},
+        "license": {
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "basePath": "/api/v1",
+    "paths": {
+        "/signup": {
+            "post": {
+                "description": "Create a new user item",
+                "consumes": [
+                    "application/json",
+                    "text/xml"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Create a user",
+                "parameters": [
+                    {
+                        "enum": [
+                            "json",
+                            "xml"
+                        ],
+                        "type": "string",
+                        "description": "mediaType",
+                        "name": "mediaType",
+                        "in": "query"
+                    },
+                    {
+                        "description": "New User",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UserInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.User"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIError"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "handler.APIError": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "timestamp": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.User": {
+            "type": "object",
+            "required": [
+                "email",
+                "firstName",
+                "lastName"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UserInput": {
+            "type": "object",
+            "required": [
+                "email",
+                "firstName",
+                "lastName"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

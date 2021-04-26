@@ -1,0 +1,60 @@
+version: '3.8'
+services:
+  app:
+    build: ./
+    container_name: app
+    restart: ${RESTART_POLICY}
+    environment:
+      - TZ
+      - SERVER_PORT
+      - BOOTSTRAP_SERVERS
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+
+  zookeeper:
+    image: bitnami/zookeeper:${ZOOKEEPER_IMAGE_TAG}
+    container_name: zookeeper
+    restart: ${RESTART_POLICY}
+    environment:
+      - TZ
+      - ALLOW_ANONYMOUS_LOGIN
+    volumes:
+      - zookeeper_data:/bitnami/zookeeper
+    ports:
+      - 2181:2181
+
+  kafka:
+    image: bitnami/kafka:${KAFKA_IMAGE_TAG}
+    container_name: kafka
+    restart: ${RESTART_POLICY}
+    environment:
+      - TZ
+      - KAFKA_ZOOKEEPER_CONNECT
+      - KAFKA_BROKER_ID
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
+      - KAFKA_ADVERTISED_PORT
+      - KAFKA_ADVERTISED_LISTENERS
+      - ALLOW_PLAINTEXT_LISTENER
+    volumes:
+      - kafka_data:/bitnami/kafka
+    ports:
+      - 9092:9092
+
+  kafdrop:
+    image: obsidiandynamics/kafdrop:${KAFDROP_IMAGE_TAG}
+    container_name: kafkawebui
+    restart: ${RESTART_POLICY}
+    environment:
+      - TZ
+      - KAFKA_BROKERCONNECT
+      - JVM_OPTS
+    ports:
+      - 9091:9000
+
+volumes:
+  kafka_data:
+    driver: local
+    name: kafka_data
+  zookeeper_data:
+    driver: local
+    name: zookeeper_data
